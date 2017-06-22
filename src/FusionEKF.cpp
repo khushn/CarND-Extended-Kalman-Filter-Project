@@ -72,11 +72,13 @@ FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
-  if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
+/**
+  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // RADAR Not coded!!!
 
     return;
   }
+  **/
 
   /*****************************************************************************
    *  Initialization
@@ -134,23 +136,27 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   //compute the time elapsed between the current and previous measurements
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_;
-  
+  cout << "dt: " << dt << endl;
+  if (dt <.05) {
+    cout << "Skipping prediction step as dt (small): " << dt << endl;
     // TODO: YOUR CODE HERE
+  } else {
   //1. Modify the F matrix so that the time is integrated
-  ekf_.F_(0, 2)=dt;
-  ekf_.F_(1, 3)=dt;
-  
-  //2. Set the process covariance matrix Q
-  float dt2=dt*dt;
-  float dt3=dt*dt2;
-  float dt4=dt*dt3;
-  ekf_.Q_=MatrixXd(4, 4);
-  ekf_.Q_ << (dt4/4)*noise_ax, 0, (dt3/2)*noise_ax, 0, 
-              0, (dt4/4)*noise_ay, 0, (dt3/2)*noise_ay,
-              (dt3/2)*noise_ax, 0, dt2*noise_ax, 0, 
-              0, (dt3/2)*noise_ay, 0, dt2*noise_ay;
+    ekf_.F_(0, 2)=dt;
+    ekf_.F_(1, 3)=dt;
+    
+    //2. Set the process covariance matrix Q
+    float dt2=dt*dt;
+    float dt3=dt*dt2;
+    float dt4=dt*dt3;
+    ekf_.Q_=MatrixXd(4, 4);
+    ekf_.Q_ << (dt4/4)*noise_ax, 0, (dt3/2)*noise_ax, 0, 
+                0, (dt4/4)*noise_ay, 0, (dt3/2)*noise_ay,
+                (dt3/2)*noise_ax, 0, dt2*noise_ax, 0, 
+                0, (dt3/2)*noise_ay, 0, dt2*noise_ay;
 
-  ekf_.Predict();
+    ekf_.Predict();
+  }
 
   /*****************************************************************************
    *  Update
@@ -173,9 +179,11 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float vx = rho_dot * cos(phi);
     float vy = rho_dot * sin(phi);
     cout << "px: " << px << ", py: " << py << ", vx: " << vx << ", vy: " << vy << endl;
+    VectorXd cartesian = VectorXd(4);
+    cartesian << px, py, vx, vy;
     // Radar updates
     Tools tools;
-    Hj_ = tools.CalculateJacobian(ekf_.x_);
+    Hj_ = tools.CalculateJacobian(cartesian);
     VectorXd z = VectorXd(3);
     z << rho, phi, rho_dot;
     ekf_.UpdateEKF(z, Hj_, R_radar_);

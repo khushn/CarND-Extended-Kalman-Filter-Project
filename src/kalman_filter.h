@@ -70,6 +70,12 @@ private:
   */
   Eigen::VectorXd compute_hx();
 
+  /**
+  Normalize the angle between -pi and +pi. By repeatedly adding or subtracting by 2*pi, 
+  based on value
+  */
+  float normalize_angle(float angle);
+
 };
 
 #endif /* KALMAN_FILTER_H_ */
