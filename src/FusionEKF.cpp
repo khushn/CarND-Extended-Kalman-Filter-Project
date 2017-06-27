@@ -91,7 +91,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       * Remember: you'll need to convert radar from polar to cartesian coordinates.
     */
     // first measurement
-    cout << "EKF: " << endl;
+    //cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
     //ekf_.x_ << 1, 1, 1, 1;
 
@@ -102,7 +102,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       float rho = measurement_pack.raw_measurements_[0];
       float phi = measurement_pack.raw_measurements_[1];
       float rho_dot = measurement_pack.raw_measurements_[2];
-      cout << "rho: " << rho << ", phi: " << phi << ", rho dot: " << rho_dot << endl;
+      //cout << "rho: " << rho << ", phi: " << phi << ", rho dot: " << rho_dot << endl;
       float px = rho * cos(phi);
       float py = rho * sin(phi);
       float vx = rho_dot * cos(phi);
@@ -136,7 +136,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   //compute the time elapsed between the current and previous measurements
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_;
-  cout << "dt: " << dt << endl;
+  //cout << "dt: " << dt << endl;
   if (dt <.05) {
     cout << "Skipping prediction step as dt (small): " << dt << endl;
     // TODO: YOUR CODE HERE
@@ -173,12 +173,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     float rho = measurement_pack.raw_measurements_[0];
     float phi = measurement_pack.raw_measurements_[1];
     float rho_dot = measurement_pack.raw_measurements_[2];
-    cout << "rho: " << rho << ", phi: " << phi << ", rho dot: " << rho_dot << endl;
+    //cout << "rho: " << rho << ", phi: " << phi << ", rho dot: " << rho_dot << endl;
     float px = rho * cos(phi);
     float py = rho * sin(phi);
     float vx = rho_dot * cos(phi);
     float vy = rho_dot * sin(phi);
-    cout << "px: " << px << ", py: " << py << ", vx: " << vx << ", vy: " << vy << endl;
+    //cout << "px: " << px << ", py: " << py << ", vx: " << vx << ", vy: " << vy << endl;
     VectorXd cartesian = VectorXd(4);
     cartesian << px, py, vx, vy;
     // Radar updates
@@ -195,6 +195,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   }
 
   // print the output
-  cout << "x_ = " << ekf_.x_ << endl;
-  cout << "P_ = " << ekf_.P_ << endl;
+  //cout << "x_ = " << ekf_.x_ << endl;
+  //cout << "P_ = " << ekf_.P_ << endl;
 }

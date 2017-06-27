@@ -87,9 +87,9 @@ VectorXd KalmanFilter::compute_hx() {
   
   h_x[1] = phi;
   h_x[2] = (px*vx + py*vy) / h_x[0];
-  cout << "inside compute_hx --" << endl;
-  cout << "x_: " << x_ << endl;
-  cout << "h_x: " << h_x[0] << ", "<< h_x[1] << ", " << h_x[2] << endl;
+  //cout << "inside compute_hx --" << endl;
+  //cout << "x_: " << x_ << endl;
+  //cout << "h_x: " << h_x[0] << ", "<< h_x[1] << ", " << h_x[2] << endl;
   return h_x;
 }
 
