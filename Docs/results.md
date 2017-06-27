@@ -38,4 +38,4 @@
 * Lidar is clearly more precise than Radar
 
 ### The plot (screen capture of simulator) 
-<image href="screen_cap.png" alt="missing image" />
+<image src="screen_cap.png" alt="missing image" />
